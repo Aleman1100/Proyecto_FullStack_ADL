@@ -1,0 +1,44 @@
+body {
+    background-color: pink;
+}
+
+#TituloPrincipal {
+    text-align: center;
+    margin: 20px 0px;
+    color: coral;
+    font-style: italic;
+}
+
+#Paginaregistro h2 {
+    text-align: center;
+    color: whitesmoke 
+}
+
+#Paginaregistro {
+    text-align: center;
+    color: crimson 
+}
+
+#Paginalogin h2 {
+    text-align: center;
+    color: whitesmoke 
+}
+
+#Paginalogin {
+    text-align: center;
+    color: crimson 
+}
+
+#SectionTareas, #SectionDeberes, #SectionRecreo {
+    text-align: center;
+    margin: 20px 0px;
+    padding: 20px 0px;
+    color: crimson;
+    font-style: italic;
+    box-shadow: inset 0 12px 36px -12px rgba(0, 0, 0, 0.5);
+}
+
+img[alt~="Slice1"], img[alt~="Slice2"], img[alt~="Slice3"]{
+    height: 600px;
+    width: 800px;
+}
