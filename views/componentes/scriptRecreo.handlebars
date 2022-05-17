@@ -1,0 +1,76 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    let url = "http://localhost:3000/mensaje";
+    let ultimoMsgRecreo = document.getElementById("ultimoMsgRecreo");
+    let MsgRecreo = document.getElementById("MsgRecreo");
+    let pokeSaludo = document.getElementById("pokeSaludo");
+
+    let mensajes = []
+    let mensajesRecreo = []
+    window.onload = getData();
+    window.onload = getPoke()
+
+    async function getData() {
+        await axios.get(url + "s").then((data) => {
+            mensajes = data.data;
+            mensajes.forEach((m, i) => {
+              if (m.seccion == "recreo" && m.visible == true){
+                i++
+                mensajesRecreo.push(m)
+              }
+            })
+            console.log(mensajesRecreo.length)
+            console.log(mensajesRecreo)
+            if (mensajesRecreo.length !== 0){
+            const UltMsg = mensajesRecreo.slice(mensajesRecreo.length - 1)
+            console.log(UltMsg)
+            ultimoMsgRecreo.innerHTML += `
+              <p class="col-12 col-md-6">${UltMsg[0].contenido}<br/>-<br/>${UltMsg[0].autor}</p>
+              <div class="col-12 col-md-6" style="background-image: url('/img/${UltMsg[0].seccion}/${UltMsg[0].multimedia}.jpg')"></div>
+              `;
+            mensajesRecreo.reverse();
+            mensajesRecreo.shift();
+            MsgRecreo.innerHTML = "";
+            mensajesRecreo.forEach((m, i) => {
+                i++
+                if ( i % 2 == 0) {
+                  MsgRecreo.innerHTML += `
+                  <p class="col-12 col-md-6">${m.contenido}<br/>-<br/>${m.autor}</p>
+                  <div class="col-12 col-md-6" style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div>
+                  <hr style="width:100%" class="my-3">
+                  `;
+                } else {
+                  MsgRecreo.innerHTML += `
+                  <div class="col-12 col-md-6" style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div>
+                  <p class="col-12 col-md-6">${m.contenido}<br/>-<br/>${m.autor}</p>
+                  <hr style="width:100%" class="my-3">
+                  `;
+                }
+            });
+          } else {
+            alert('No hay mensajes disponibles.')
+          };
+        });
+    }
+
+    async function getPoke(){
+        let favPoke = ['glaceon', 'eevee', 'vulpix', 'primarina', 'sylveon', 'pikachu', 'tsareena', 'ponyta', 'dedenne']
+        const random = Math.floor(Math.random() * favPoke.length);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${favPoke[random]}`);
+        const results = response.data.sprites.other["official-artwork"].front_default
+        console.log(results)
+        pokeSaludo.innerHTML = "";
+        pokeSaludo.innerHTML += `
+              <h5 class="text-center mb-3">Uno de tus pokes favoritos a venido a acompañarte en tu rato libre.... Junto al <p id="Charizard">mejor</p> pokemon del mundo :)</h5>
+              <div class="row justify-content-evenly">
+                <div class="col-12 col-md-6" style="background-image: url('${results}')"></div>
+                <div class="col-12 col-md-6" style="background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png')"></div>
+              </div>
+              `;
+    }
+
+    async function GetPokeimg(name) {
+    const {data} = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    return data
+    }
+</script>

@@ -1,5 +1,61 @@
 {{> head }}
 <body>
     <h1 id="TituloPrincipal"><i class="fas fa-star"></i>Agenda Virtual Samus Bacquet<i class="fas fa-star"></i></h1>
-    <h2>Colaborador</h2>
+    <div id="Paginaregistro">
+        <h2>Colaborador</h2>
+        <form action="/mensaje" method="POST" enctype="multipart/form-data" name="mensajeForm" onsubmit="return validarForm()" required>
+        <div class="form-group row w-50 m-auto mb-3">
+            <div class="form-group col-12 col-lg-12">
+                <label>Contenido</label>
+                <textarea name="contenido" class="form-control m-auto" placeholder="Escribe lo que deseas publicar en el sitio principal" rows="3"/></textarea>
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Autor</label>
+                <input name="autor" class="form-control m-auto mb-3" id="email" value="" readonly/>
+            </div>       
+            <select class="form-select m-auto mb-3 w-50" aria-label="Default select example" name="seccion">
+                <option selected value="">Elige la seccion</option>
+                <option value="tareas">Tareas</option>
+                <option value="deberes">Deberes</option>
+                <option value="recreo">Recreo</option>
+            </select>
+            <div class="form-group col-12 col-sm-12 mb-3">
+                <label>Multimedia</label>
+                <input type="file" name="multimedia"/>
+            </div>
+        </div>
+        <button class="btn btn-success d-block m-auto mb-3" type="submit">Enviar</button>
+        </form>
+        <section id="misMensajesColab" class="mb-3">
+            <h3>Mis mensajes</h3>
+            <table class="table w-75 m-auto">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Seccion</th>
+                    <th scope="col">Contenido</th>
+                    <th scope="col">Multimedia</th>
+                </tr>
+                </thead>
+                <tbody id="cuerpoMisMensajes"></tbody>
+            </table>
+        </section>
+        <section id="editMensajesColab">
+            <form action="/mensajeEdit" method="post" enctype="multipart/form-data" name="mensajeFormEdit" onsubmit="return validarFormEdit()" required>
+            <div class="form-group row w-50 m-auto mb-3">
+            <div class="form-group col-12 col-lg-12">
+                <label>ID</label>
+                <input name="idEdit" class="form-control m-auto mb-3" id="boxIdEdit" value="" readonly/>
+            </div> 
+            <div class="form-group col-12 col-lg-12">
+                <label>Contenido</label>
+                <textarea id="boxContenidoEdit" name="contenidoEdit" class="form-control m-auto" rows="3"/></textarea>
+            </div>      
+        </div>
+        <button class="btn btn-success d-block m-auto mb-3" type="submit">Editar</button>
+        </form>
+        </section>
+    </div> 
 </body>
+{{> scriptColab }}

@@ -2,6 +2,100 @@ body {
     background-color: pink;
 }
 
+#bodyIndex {
+    background-image: url('index.jpg');
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  outline: black;
+  background-size: 100%, 100%;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-image: none;
+}
+
+.carousel-control-next-icon:after
+{
+  content: '>';
+  font-size: 55px;
+  color: teal;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 55px;
+  color: teal;
+}
+
+#TituloPrincipalIndex {
+    color: teal;
+    text-align: center;
+    margin: 20px 0px;
+    font-style: italic;
+}
+
+#SectionTareas, #SectionDeberes, #SectionRecreo {
+    text-align: center;
+    margin: 20px 0px;
+    padding: 20px 0px;
+    color: teal;
+    font-style: italic;
+    box-shadow: inset 0 12px 36px -12px rgba(0, 0, 0, 0.5);
+}
+
+#footerIndex {
+    height: 70px;
+    background-color: teal;
+    text-align: center;
+    color: pink;
+    font-style: italic;
+    font-size: 1em;
+}
+
+#footerIndex h4 a {
+    color: white;
+    text-decoration: inherit;
+}
+
+#bodyRecreo {
+    background-image: url('fondo1.jpg');
+}
+
+#TituloPrincipalRecreo {
+    color: brown;
+    text-align: center;
+    margin: 20px 0px;
+    font-style: italic;    
+}
+
+#bodyDeberes {
+    background-image: url('fondo2.jpg');
+}
+
+#bodyDeberes div hr, #bodyTareas div hr, #bodyRecreo div hr {
+    width: 10%;
+    margin: 0px 20px;
+    display:inline-flex;
+}
+
+#bodyTareas {
+    background-image: url('fondo3.jpg');
+}
+
+#TituloPrincipalTareas {
+    color: black;
+    text-align: center;
+    margin: 20px 0px;
+    font-style: italic;
+}
+
+#ultimoMsgTareas p, #MsgTareas p, #ultimoMsgDeberes p, #MsgDeberes p, #ultimoMsgRecreo p, #MsgRecreo p {
+    background: #f8f9fa9e;
+}
+
 #TituloPrincipal {
     text-align: center;
     margin: 20px 0px;
@@ -9,36 +103,52 @@ body {
     font-style: italic;
 }
 
-#Paginaregistro h2 {
+#Paginaregistro h2, #Paginalogin h2, #Paginacolaborador h2 {
     text-align: center;
     color: whitesmoke 
 }
 
-#Paginaregistro {
+#Paginaregistro, #Paginalogin, #Paginacolaborador {
     text-align: center;
     color: crimson 
 }
 
-#Paginalogin h2 {
-    text-align: center;
-    color: whitesmoke 
-}
-
-#Paginalogin {
+#adminUsuarios, #adminMensajes {
     text-align: center;
     color: crimson 
-}
-
-#SectionTareas, #SectionDeberes, #SectionRecreo {
-    text-align: center;
-    margin: 20px 0px;
-    padding: 20px 0px;
-    color: crimson;
-    font-style: italic;
-    box-shadow: inset 0 12px 36px -12px rgba(0, 0, 0, 0.5);
 }
 
 img[alt~="Slice1"], img[alt~="Slice2"], img[alt~="Slice3"]{
     height: 600px;
     width: 800px;
+}
+
+td div{
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+}
+
+#ultimoMsgDeberes p, #MsgDeberes p, #ultimoMsgTareas p, #MsgTareas p, #ultimoMsgRecreo p, #MsgRecreo p {
+    border-style: outset inset;
+}
+
+#ultimoMsgDeberes div, #MsgDeberes div, #ultimoMsgTareas div, #MsgTareas div, #ultimoMsgRecreo div, #MsgRecreo div{
+    background-size: cover; 
+    width: 600px;
+    height: 400px;
+    border-style: ridge;
+}
+
+#pokeSaludo div div{
+    display: inline-flex;
+    background-size: cover;
+    width: 475px;
+    height: 475px;    
+}
+
+#Charizard {
+    display: contents;
+    font-weight: bolder;
+    font-size: x-large;
 }

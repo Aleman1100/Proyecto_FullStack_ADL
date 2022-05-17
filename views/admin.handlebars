@@ -1,5 +1,41 @@
 {{> head }}
 <body>
     <h1 id="TituloPrincipal"><i class="fas fa-star"></i>Agenda Virtual Samus Bacquet<i class="fas fa-star"></i></h1>
-    <h2>Administrador</h2>
+    <h2 class="text-center">Administrador</h2>
+    <div>
+        <hr class="w-100 mb-3" />
+        <section id="adminUsuarios" class="mb-3">
+            <h3>Usuarios registrados</h3>
+            <table class="table w-75 m-auto">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Foto</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Moderador</th>
+                </tr>
+                </thead>
+                <tbody id="cuerpoUsers"></tbody>
+            </table>
+        </section>
+        <section id="adminMensajes" class="mb-3">
+          <h3>Mensajes registrados</h3>
+            <table class="table w-75 m-auto">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Seccion</th>
+                    <th scope="col">Contenido</th>
+                    <th scope="col">Multimedia</th>
+                    <th scope="col">Visible</th>
+                </tr>
+                </thead>
+                <tbody id="cuerpoMensajes"></tbody>
+            </table>
+        </section>
+    </div>
 </body>
+{{> scriptAdmin }}

@@ -12,10 +12,21 @@
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input class="form-control w-50 m-auto mb-3" type="text" name="password"/>
+            <input class="form-control w-50 m-auto mb-3" type="password" name="password"/>
           </div>
         </div>
         <button class="btn btn-success mb-3">Ingresar</button>
       </form>
     </div>
   </body>
+  <script>
+      const registro = "{{ registro }}"
+
+      window.onload = registrOK();
+    
+      async function registrOK() {
+          if (registro == 'true'){
+            alert("Registro exitoso, debes esperar la validacion del Admin para entrar.")
+          }
+      }
+  </script>

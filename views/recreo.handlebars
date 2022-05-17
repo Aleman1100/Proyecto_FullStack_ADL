@@ -1,1 +1,45 @@
 {{> head }}
+<body id="bodyRecreo">
+    <!-- Navbar para facilitar el ingreso a secciones. -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="http://localhost:3000/">Inicio</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/deberes">Deberes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/tareas">Tareas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/recreo">Recreo</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <h1 id="TituloPrincipalRecreo"><i class="fas fa-star px-3"></i>Agenda Virtual Samus Bacquet<i class="fas fa-star px-3"></i></h1>
+      <h2 class="text-center">Sección recreo</h2>
+      <section class="mb-3">
+          <div id="pokeSaludo"></div>
+      </section>
+      <div class="d-block my-4">
+        <hr><hr><hr><hr><hr><hr><hr><hr>
+      </div>
+      <section class="mb-3">
+          <h3 class="text-center mb-3">Este es el último mensaje que te enviaron!</h3>
+          <div class="row justify-content-around" id="ultimoMsgRecreo"></div>
+      </section>
+      <div class="d-block my-4">
+        <hr><hr><hr><hr><hr><hr><hr><hr>
+      </div>
+      <section class="mb-3">
+          <h3 class="text-center mb-3"> Estos son tus mensajes disponibles.</h3>
+          <div class="row justify-content-around" id="MsgRecreo"></div>
+      </section>
+</body>
+{{> scriptRecreo }}

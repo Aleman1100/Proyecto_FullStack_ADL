@@ -1,0 +1,74 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+<script>
+    const email = "{{ email }}"
+
+    let url = "http://localhost:3000/mensaje";
+    let tbody = document.getElementById("cuerpoMisMensajes");
+    document.getElementById("editMensajesColab").style.display = "none";
+
+    let mensajes = []
+    window.onload = getData();
+
+    function validarForm() {
+        var contenido = document.forms["mensajeForm"]["contenido"].value;
+        var seccion = document.forms["mensajeForm"]["seccion"].value;
+        var multimedia = document.forms["mensajeForm"]["multimedia"].value;
+        if (contenido == null || contenido == "" || seccion == null || seccion == "" || multimedia == null || multimedia == "") { 
+            alert("Debes completar el formulario");
+            return false;
+        }
+    }
+
+    function validarFormEdit() {
+        var contenido = document.forms["mensajeFormEdit"]["contenidoEdit"].value;
+        if (contenido == null || contenido == "") { 
+            alert("Debes completar la edicion");
+            return false;
+        }
+    }
+
+    async function getData() {
+        document.getElementById('email').value = email
+        await axios.get(url + "s").then((data) => {
+            mensajes = data.data;
+            tbody.innerHTML = "";
+            mensajes.forEach((m, i) => {
+                if (m.autor == email){
+                    tbody.innerHTML += `
+                    <tr>
+                    <td>${i + 1}</td>
+                    <td>${m.id}</td>
+                    <td>${m.seccion}</td>
+                    <td>${m.contenido}</td>
+                    <td><div style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div></td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editarMensaje('${m.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="eliminarMensaje('${m.id}')">Eliminar</button>
+                    </td>
+                    </tr>
+                    `;
+                }
+            });
+        });
+    }
+
+    function eliminarMensaje(id) {
+        axios.delete(url + "/" + id).then(() => {
+        alert("Mensaje " + id + " eliminado");
+        getData();
+        });
+    }
+
+    async function editarMensaje(id) {
+        document.getElementById("editMensajesColab").style.display = "block";
+        await axios.get(url + "s").then((data) => {
+            mensajes = data.data;
+            mensajes.forEach((m, i) => {
+                if (m.id == id){
+                    document.getElementById("boxIdEdit").value = m.id
+                    document.getElementById("boxContenidoEdit").value = m.contenido
+                }
+            });
+        });
+    }
+</script>

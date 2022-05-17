@@ -14,6 +14,8 @@ app.use( expressFileUpload({
     responseOnLimit: "Peso del archivo es mayor a lo permitido",
     })
 );
+const { v4: uuidv4 } = require('uuid')
+
 app.listen(port, () => console.log(`Up en ${port}`))
 
 app.use(express.static("assets"));
@@ -37,17 +39,36 @@ app.get('/', (req,res) => {
 
 app.get('/Registro', (req,res) => {
     res.render('registro', {
-        layout: 'registro'
+        layout: 'registro'   
     });
 });
 
 app.get('/Login', (req,res) => {
     res.render('login', {
-        layout: 'login'
+        layout: 'login',
+        registro: false
     });
 });
 
-const { nuevoUsuario,getUsuarios,editUsuario,validarUsuario,deleteUsuario } = require('./consultasUsuarios.js');
+app.get('/deberes', (req,res) => {
+    res.render('deberes', {
+        layout: 'deberes'
+    });
+});
+
+app.get('/tareas', (req,res) => {
+    res.render('tareas', {
+        layout: 'tareas'
+    });
+});
+
+app.get('/recreo', (req,res) => {
+    res.render('recreo', {
+        layout: 'recreo'
+    });
+});
+
+const { nuevoUsuario,getUsuarios,editUsuario,validarUsuario,deleteUsuario,deleteImagenesUsuario } = require('./consultasUsuarios.js');
 const { nuevoMensaje,getMensajes,editMensajes,validarMensajes,deleteMensajes } = require('./consultasMensajes.js');
 
 const secretKey = 'KirbyMariano'
@@ -63,9 +84,7 @@ app.get('/SignIn', async (req, res) => {
     const { email, password } = req.query;
     const respuesta = await getUsuarios()
     const user = respuesta.find((u) => u.email == email && u.password == password);
-    console.log(user)
-    console.log(user.administrador)
-    if (user.administrador == true) {
+    if (user) {
         const token = jwt.sign(
             {
                 exp: Math.floor(Date.now() / 1000) + 120,
@@ -73,28 +92,25 @@ app.get('/SignIn', async (req, res) => {
             },
             secretKey
         );
-        res.send(`
-        <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Admin?token=${token}">
-        Admin ${email}.
-        <script>
-        sessionStorage.setItem('token', JSON.stringify('${token}'))
-        </script>
-        `);
-    } else if (user.moderador == true) {
-        const token = jwt.sign(
-            {
-                exp: Math.floor(Date.now() / 1000) + 120,
-                data: user,
-            },
-            secretKey
-        );
-        res.send(`
-        <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Colaborador?token=${token}">
-        Colaborador ${email}.
-        <script>
-        sessionStorage.setItem('token', JSON.stringify('${token}'))
-        </script>
-        `);
+        if (user.administrador == true){
+            res.send(`
+            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Admin?token=${token}">
+            Admin ${email}.
+            <script>
+            sessionStorage.setItem('token', JSON.stringify('${token}'))
+            </script>
+            `);
+        } else if (user.moderador == true) {
+            res.send(`
+            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Colaborador?token=${token}">
+            Colaborador ${email}.
+            <script>
+            sessionStorage.setItem('token', JSON.stringify('${token}'))
+            </script>
+            `);    
+        } else if (user.moderador == false && user.administrador == false) {
+            res.send('Usuario no cuenta con permisos de Colaborador');    
+        }
     } else {
         res.send('Usuario o contraseña incorrectas');
     }
@@ -131,16 +147,12 @@ app.get('/Colaborador', (req,res) => {
             res.render('colaborador', {
                 layout: 'colaborador',
                 token:token,
-                email: decoded.data.email,
-                nombre: decoded.data.nombre,
-                password: decoded.data.password,                
+                email: decoded.data.email,                
             });
     });
 });
 
-// Inicio rutas para cada vista
-let data = JSON.parse(fs.readFileSync('usuarios.json', 'utf8'))
-
+// Inicio rutas para cada vista de Usuarios
 app.post('/usuario', async (req, res) => {
     const email = req.body.email
     const nombre = req.body.nombre
@@ -156,11 +168,12 @@ app.post('/usuario', async (req, res) => {
         const respuesta = await nuevoUsuario(email,nombre,pass,img)
         const respuesta2 = await getUsuarios();
         fs.writeFileSync('usuarios.json', JSON.stringify(respuesta2))
-        res.render('registro', {
-            layout: 'registro',
+        res.render('login', {
+            layout: 'login',
+            registro: true
         });
         console.log(respuesta[0])
-        console.log("Registro exitoso")
+        console.log("Registro de usuario exitoso")
     } else {
         console.log('Contraseñas no coinciden')
     }
@@ -188,6 +201,7 @@ app.post('/usuarioEdit', async (req,res) => {
         fs.writeFileSync('usuarios.json', JSON.stringify(respuesta2))
         res.render('login', {
             layout: 'login',
+            registro: false
         });
     } else {
         console.log('Contraseñas no coinciden')
@@ -196,8 +210,8 @@ app.post('/usuarioEdit', async (req,res) => {
 })
 
 app.put('/usuario', async (req, res) => {
-    const { email, estado } = req.body;
-    const respuesta = await validarUsuario(email, estado);
+    const { email, moderador } = req.body;
+    const respuesta = await validarUsuario(email, moderador);
     const respuesta2 = await getUsuarios();
     console.log(respuesta2)
     console.log(respuesta[0])
@@ -209,25 +223,100 @@ app.put('/usuario', async (req, res) => {
 
 app.delete('/usuario/:email', async (req, res) => {
     const { email } = req.params;
-    const respuestaLogin = await getUsuarios()
-    const user = respuestaLogin.find((u) => u.email == email);
-    if (user) {
-        const token = jwt.sign(
-            {
-                exp: Math.floor(Date.now() / 1000) + 15,
-                data: user,
-            },
-            secretKey
-        );
+    const respuestaDeleteImgs = await deleteImagenesUsuario(email)
+    let multimedia = []
+    multimedia = respuestaDeleteImgs
+    multimedia.forEach((m, i) => {
+        fs.unlink(`${__dirname}/assets/img/${m.seccion}/${m.multimedia}.jpg`, (err) => {
+            i + 1;
+        })
+    })
     const respuestaDelete = await deleteUsuario(email)
-    console.log(respuestaDelete)
-    const respuestaRefresh = await getUsuarios();
-    fs.writeFileSync('usuarios.json', JSON.stringify(respuestaRefresh))
+    const respuestaRefreshUsers = await getUsuarios();
+    fs.writeFileSync('usuarios.json', JSON.stringify(respuestaRefreshUsers))
     fs.unlink(`${__dirname}/assets/img/perfiles/foto-${email}.jpg`, (err) => {
         console.log(`Imagen de ${email} eliminada`);
     });
-    };
-    console.log(`Usuario ${email} eliminado del JSON`)
+    const respuestaRefreshMsg = await getMensajes();
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuestaRefreshMsg))
+    res.render('admin', {
+        layout: 'admin',               
+    });
 });
 
-// Fin rutas para cada vista
+// Fin rutas para cada vista de Usuario
+
+// Inicio rutas para cada vista de Mensajes
+app.post('/mensaje', async (req, res) => {
+    const contenido = req.body.contenido
+    const autor = req.body.autor
+    const seccion = req.body.seccion
+    const { multimedia } = req.files;
+    const img = `${autor}-${seccion}-${uuidv4().slice(8)}`;
+    multimedia.mv(`${__dirname}/assets/img/${seccion}/${img}.jpg`, (err) => {
+        console.log('Imagen agregada correctamente')
+    })
+    const respuesta = await nuevoMensaje(contenido,seccion,img,autor)
+    const respuesta2 = await getMensajes();
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuesta2))
+    console.log(`Registro de mensaje exitoso en seccion ${seccion}`)
+    res.render('colaborador', {
+        layout: 'colaborador',
+        email:respuesta[0].autor,                
+    });         
+});
+
+app.get('/mensajes', async (req,res) => {
+    const respuesta = await getMensajes();
+    res.send(respuesta);
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuesta))
+})
+
+app.post('/mensajeEdit', async (req,res) => {
+    const id = req.body.idEdit
+    const contenido = req.body.contenidoEdit
+    const respuesta = await editMensajes(id,contenido)
+    console.log(respuesta)
+    console.log('Mensaje editado correctamente')
+    const respuesta2 = await getMensajes();
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuesta2))
+    res.render('colaborador', {
+        layout: 'colaborador',
+        email:respuesta[0].autor,                
+    });
+
+})
+
+app.put('/mensaje', async (req, res) => {
+    const { id, visible } = req.body;
+    const respuesta = await validarMensajes(id, visible);
+    const respuesta2 = await getMensajes();
+    console.log(respuesta2)
+    console.log(respuesta[0])
+    console.log('mensaje validado')
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuesta2))
+    res.send(console.log('Archivo actualizado'))
+});
+
+
+app.delete('/mensaje/:id', async (req, res) => {
+    const { id } = req.params;
+    const respuestaImg = await getMensajes();
+    const mensaje = respuestaImg.find((m) => m.id == id);
+    if (mensaje){
+        fs.unlink(`${__dirname}/assets/img/${mensaje.seccion}/${mensaje.multimedia}.jpg`, (err) => {
+            console.log(`Imagen de mensaje ID ${mensaje.multimedia} eliminada`);
+        });
+    }
+    const respuestaDelete = await deleteMensajes(id)
+    console.log(respuestaDelete)
+    const respuestaRefresh = await getMensajes();
+    fs.writeFileSync('mensajes.json', JSON.stringify(respuestaRefresh))
+    console.log(`Mensaje ${id} eliminado del JSON`)
+    res.render('colaborador', {
+        layout: 'colaborador',
+        email:mensaje.email,                
+    });   
+});
+
+// Fin rutas para cada vista de Mensajes

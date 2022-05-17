@@ -43,30 +43,47 @@ async function editUsuario(email, newnombre, newpass){
     }
 }
 
-async function validarUsuario(email, estado){
+async function validarUsuario(email, moderador){
     try {
         const res = await pool.query(
             `UPDATE usuarios SET moderador = $2
             WHERE email = $1 RETURNING*;`,
-            [email, estado]
+            [email, moderador]
         );
         return res.rows;
     } catch (e) {
         console.log(e)
     }
-}
+};
 
-async function deleteUsuario(email) {
+const deleteUsuario = async (email) => {
+    const consulta = `
+    DELETE FROM mensajes WHERE autor = '${email}';
+    DELETE FROM usuarios WHERE email = '${email}';
+    `;
     try {
-        const result = await pool.query(
-            `DELETE FROM usuarios WHERE email = $1 RETURNING *`,
+        const result = await pool.query(consulta);
+        console.log(result.rowCount)
+        return result;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
+
+async function deleteImagenesUsuario(email){
+    try {
+        const res = await pool.query(
+            `SELECT multimedia,seccion 
+            FROM mensajes
+            WHERE autor = $1`,
             [email]
         );
-        return result.rowCount;
-    }   catch (e) {
-        return e
+        return res.rows;
+    } catch (e) {
+        console.log(e)
     }
-}
+};
 
 module.exports = {
     nuevoUsuario,
@@ -74,4 +91,5 @@ module.exports = {
     editUsuario,
     validarUsuario,
     deleteUsuario,
+    deleteImagenesUsuario,
 }

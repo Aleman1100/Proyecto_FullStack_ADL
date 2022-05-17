@@ -1,34 +1,48 @@
 {{> head }}
-
 <body>
 <h1 id="TituloPrincipal"><i class="fas fa-star"></i>Agenda Virtual Samus Bacquet<i class="fas fa-star"></i></h1>
 <div class="py-4" id="Paginaregistro">
-    <h2>Ingreso de colaboradores</h2>
+    <h2>Registro de colaboradores</h2>
     <hr class="w-100"/>
-    <form action="/usuario" method="POST" enctype="multipart/form-data">
+    <form action="/usuario" method="POST" enctype="multipart/form-data" name="passwordForm" onsubmit="return validarPass()" required>
     <div class="form-group row w-50 m-auto">
         <div class="form-group col-12 col-sm-6">
-        <label>Email</label>
-        <input name="email" class="form-control m-auto" />
+            <label>Email</label>
+            <input type="email" name="email" class="form-control m-auto" />
         </div>
-        <div class="form-group col-12 col-sm-6">
-        <label>Nombre</label>
+            <div class="form-group col-12 col-sm-6">
+            <label>Nombre</label>
         <input name="nombre" class="form-control m-auto" />
         </div>
         <div class="form-group col-12 col-sm-6">
-        <label>Password</label>
-        <input name="password1" class="form-control m-auto" />
+            <label>Password</label>
+            <input name="password1" class="form-control m-auto" />
         </div>
         <div class="form-group col-12 col-sm-6">
-        <label>Repita la password</label>
-        <input name="password2" class="form-control m-auto mb-3" />
+            <label>Repita la password</label>
+            <input name="password2" class="form-control m-auto mb-3"/>
         </div>
         <div class="form-group col-12 col-sm-12 mb-3">
-        <label>Foto de perfil</label>
-        <input type="file" name="foto_usuario"/>
+            <label>Foto de perfil</label>
+            <input type="file" name="foto_usuario"/>
         </div>
     </div>
     <button class="btn btn-success mb-3" type="submit">Registrar</button>
     </form>
 </div>
 </body>
+<script>
+    function validarPass() {
+        var pass1 = document.forms["passwordForm"]["password1"].value;
+        var pass2 = document.forms["passwordForm"]["password2"].value;
+        if (pass1 !== pass2){
+            alert("Contraseñas deben ser identicas.");
+        }
+        var nombre = document.forms["passwordForm"]["nombre"].value;
+        var perfil = document.forms["passwordForm"]["foto_usuario"].value;
+        if (pass1 == null || pass1 == "" || pass2 == null || pass2 == "" || nombre == null || nombre == "" || perfil == null || perfil == ""){
+           alert("Debes completar el formulario.");
+           return false; 
+        }
+    }   
+</script>

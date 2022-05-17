@@ -1,0 +1,131 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  let tbodyuser = document.getElementById("cuerpoUsers");
+  let tbodymsg = document.getElementById("cuerpoMensajes");
+
+  let users = [];
+  let mensajes = []
+  window.onload = getDataUsers();
+  window.onload = getDataMensajes();
+
+  async function getDataUsers() {
+    await axios.get("http://localhost:3000/usuarios").then((data) => {
+      users = data.data;
+      console.log(users);
+      tbodyuser.innerHTML = "";
+      users.forEach((u, i) => {
+        if (u.moderador == false) {
+          tbodyuser.innerHTML += `
+          <tr>
+            <td scope="row">${i + 1}</td>
+            <td><div style="background-image: url('/img/perfiles/foto-${u.email}.jpg')"></div></td>
+            <td>${u.email}</td>
+            <td>${u.nombre}</td>
+            <td>${u.password}</td>
+            <td><input onclick="aprobacionUser('${u.email}',${u.moderador})" type="checkbox" value="${u.moderador}"/></td>
+            <td>
+                <button class="btn btn-danger" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+        } else {
+          tbodyuser.innerHTML += `
+          <tr>
+            <td scope="row">${i + 1}</td>
+            <td><div style="background-image: url('/img/perfiles/foto-${u.email}.jpg')"></div></td>
+            <td>${u.email}</td>
+            <td>${u.nombre}</td>
+            <td>${u.password}</td>
+            <td><input onclick="aprobacionUser('${u.email}',${u.moderador})" type="checkbox" checked value="${u.moderador}"/></td>
+            <td>
+                <button class="btn btn-danger" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+        }
+      });
+    });
+  }
+
+  async function getDataMensajes() {
+    await axios.get("http://localhost:3000/mensajes").then((data) => {
+      mensajes = data.data;
+      console.log(mensajes);
+      tbodymsg.innerHTML = "";
+      mensajes.forEach((m, i) => {
+        if (m.visible == false) {
+          tbodymsg.innerHTML += `
+          <tr>
+            <td scope="row">${i + 1}</td>            
+            <td>${m.id}</td>
+            <td>${m.seccion}</td>
+            <td>${m.contenido}</td>
+            <td><div style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div></td>
+            <td><input onclick="aprobacionMsg('${m.id}',${m.visible})" type="checkbox" value="${m.visible}"/></td>
+            <td>
+                <button class="btn btn-danger" onclick="eliminarMensaje('${m.id}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+        } else {
+          tbodymsg.innerHTML += `
+          <tr>
+            <td scope="row">${i + 1}</td>
+            <td>${m.id}</td>
+            <td>${m.seccion}</td>
+            <td>${m.contenido}</td>
+            <td><div style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div></td>
+            <td><input onclick="aprobacionMsg('${m.id}',${m.visible})" type="checkbox" checked value="${m.visible}"/></td>
+            <td>
+                <button class="btn btn-danger" onclick="eliminarMensaje('${m.id}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+        }
+      });
+    });
+  }
+
+  function aprobacionUser(email, moderador) {
+    getDataUsers()
+    moderador = !moderador
+    axios
+      .put("http://localhost:3000/usuario", {
+        email,
+        moderador,
+      })
+      window.location.reload()
+      .then(() => {
+        console.log('accion')
+    })
+  }
+
+  function aprobacionMsg(id, visible) {
+    getDataMensajes()
+    visible = !visible
+    axios
+      .put("http://localhost:3000/mensaje", {
+        id,
+        visible,
+      })
+      window.location.reload()
+      .then(() => {
+        console.log('accion')
+    })
+  }
+
+  function eliminarUsuario(email) {
+        axios.delete("http://localhost:3000/usuario/" + email).then(() => {
+        alert("Usuario " + email + " eliminado");
+        getDataUsers();
+        getDataMensajes();
+        });
+    }
+
+  function eliminarMensaje(id) {
+        axios.delete("http://localhost:3000/mensaje/" + id).then(() => {
+        alert("Mensaje " + id + " eliminado");
+        getDataMensajes();
+        });
+    }
+</script>

@@ -1,6 +1,88 @@
 {{> head }}
-
-<body>
-
-    
+<body id="bodyDeberes">
+    <!-- Navbar para facilitar el ingreso a secciones. -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="http://localhost:3000/">Inicio</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/deberes">Deberes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/tareas">Tareas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="http://localhost:3000/recreo">Recreo</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <h1 id="TituloPrincipal"><i class="fas fa-star px-3"></i>Agenda Virtual Samus Bacquet<i class="fas fa-star px-3"></i></h1>
+    <h2 class="text-center" >Sección deberes</h2>
+    <section class="mb-3">
+        <h3 class="text-center mb-3">Este es el último mensaje que te enviaron!</h3>
+        <div class="row justify-content-around" id="ultimoMsgDeberes"></div>
+    </section>
+    <div class="d-block my-4">
+    <hr><hr><hr><hr><hr><hr><hr><hr>
+    </div>
+    <section>
+        <h3 class="text-center mb-3"> Estos son tus mensajes disponibles.</h3>
+        <div class="row justify-content-around" id="MsgDeberes"></div>
+    </section>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    let url = "http://localhost:3000/mensaje";
+    let ultimoMsgDeberes = document.getElementById("ultimoMsgDeberes");
+    let MsgDeberes = document.getElementById("MsgDeberes");
+
+    let mensajes = []
+    let mensajesDeberes = []
+    window.onload = getData();
+
+    async function getData() {
+        await axios.get(url + "s").then((data) => {
+            mensajes = data.data;
+            mensajes.forEach((m, i) => {
+              if (m.seccion == "deberes" && m.visible == true){
+                i++
+                mensajesDeberes.push(m)
+              }
+            })
+            if (mensajesDeberes.length !== 0){
+            const UltMsg = mensajesDeberes.slice(mensajesDeberes.length - 1)
+            ultimoMsgDeberes.innerHTML += `
+              <p class="col-12 col-md-6">${UltMsg[0].contenido}<br/>-<br/>${UltMsg[0].autor}</p>
+              <div class="col-12 col-md-6" style="background-image: url('/img/${UltMsg[0].seccion}/${UltMsg[0].multimedia}.jpg')"></div>
+              `;
+            mensajesDeberes.reverse();
+            mensajesDeberes.shift();
+            MsgDeberes.innerHTML = "";
+            mensajesDeberes.forEach((m, i) => {
+                i++
+                if ( i % 2 == 0) {
+                  MsgDeberes.innerHTML += `
+                  <p class="col-12 col-md-6">${m.contenido}<br/>-<br/>${m.autor}</p>
+                  <div class="col-12 col-md-6" style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div>
+                  <hr style="width:100%" class="my-4">
+                  `;
+                } else {
+                  MsgDeberes.innerHTML += `
+                  <div class="col-12 col-md-6" style="background-image: url('/img/${m.seccion}/${m.multimedia}.jpg')"></div>
+                  <p class="col-12 col-md-6">${m.contenido}<br/>-<br/>${m.autor}</p>
+                  <hr style="width:100%" class="my-4">
+                  `;
+                }
+            });
+          } else {
+            alert('No hay mensajes disponibles.')
+          };
+        });
+    }
+</script>

@@ -1,1 +1,1 @@
-[{"email":"alejandro.bacquet@gmail.com","nombre":"Alejandro Bacquet","password":"asd123","foto":"foto-alejandro.bacquet@gmail.com","administrador":false,"moderador":false,"usuario":true},{"email":"susuperkata@gmail.com","nombre":"Catalina Marchant","password":"123asd","foto":"foto-susuperkata@gmail.com","administrador":false,"moderador":false,"usuario":true}]
+[{"email":"alejandro.bacquet@gmail.com","nombre":"Alejandro Bacquet","password":"asd123","foto":"foto-alejandro.bacquet@gmail.com","administrador":true,"moderador":true,"usuario":true}]

@@ -7,12 +7,12 @@ const pool = new Pool({
     port: 5432
 });
 
-async function nuevoMensaje(contenido, multimedia, autor){
+async function nuevoMensaje(contenido, seccion, multimedia, autor){
     try{
         const result = await pool.query(
-            `INSERT INTO mensajes (contenido, multimedia, autor) 
-            values ($1,$2,$3) RETURNING *;`,
-            [contenido, multimedia, autor]
+            `INSERT INTO mensajes (contenido, seccion, multimedia, autor, visible) 
+            values ($1,$2,$3,$4,false) RETURNING *;`,
+            [contenido, seccion, multimedia, autor]
         );
         return result.rows;
     }   catch(e)
@@ -30,12 +30,12 @@ async function getMensajes() {
     }
 }
 
-async function editMensajes(email, newContenido, newMultimedia){
+async function editMensajes(id, newContenido){
     try {
         const res = await pool.query(
-            `UPDATE mensajes SET (newContenido, newContenido) = ($2,$3)
-            WHERE email = $1 RETURNING*;`,
-            [email, newContenido, newMultimedia]
+            `UPDATE mensajes SET contenido = $2
+            WHERE id = $1 RETURNING*;`,
+            [id, newContenido]
         );
         return res.rows;
     } catch (e) {
@@ -43,12 +43,12 @@ async function editMensajes(email, newContenido, newMultimedia){
     }
 }
 
-async function validarMensajes(email, estado){
+async function validarMensajes(id, visible){
     try {
         const res = await pool.query(
-            `UPDATE usuarios SET moderador = $2
-            WHERE email = $1 RETURNING*;`,
-            [email, estado]
+            `UPDATE mensajes SET visible = $2
+            WHERE id = $1 RETURNING*;`,
+            [id, visible]
         );
         return res.rows;
     } catch (e) {
@@ -56,11 +56,11 @@ async function validarMensajes(email, estado){
     }
 }
 
-async function deleteMensajes(email) {
+async function deleteMensajes(id) {
     try {
         const result = await pool.query(
-            `DELETE FROM usuarios WHERE email = $1 RETURNING *`,
-            [email]
+            `DELETE FROM mensajes WHERE id = $1 RETURNING *`,
+            [id]
         );
         return result.rowCount;
     }   catch (e) {
