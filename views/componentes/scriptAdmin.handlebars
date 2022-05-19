@@ -9,12 +9,12 @@
   window.onload = getDataMensajes();
 
   async function getDataUsers() {
-    await axios.get("http://localhost:3000/usuarios").then((data) => {
+    await axios.get("https://proyectofs-alejandrob.herokuapp.com/usuarios").then((data) => {
       users = data.data;
       console.log(users);
       tbodyuser.innerHTML = "";
       users.forEach((u, i) => {
-        if (u.moderador == false) {
+        if (u.administrador == true) {
           tbodyuser.innerHTML += `
           <tr>
             <td scope="row">${i + 1}</td>
@@ -22,13 +22,10 @@
             <td>${u.email}</td>
             <td>${u.nombre}</td>
             <td>${u.password}</td>
-            <td><input onclick="aprobacionUser('${u.email}',${u.moderador})" type="checkbox" value="${u.moderador}"/></td>
-            <td>
-                <button class="btn btn-danger" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
-            </td>
+            <td><input onclick="aprobacionUser('${u.email}',${u.moderador})" type="checkbox" checked value="${u.moderador}" readonly/></td>
           </tr>
         `;
-        } else {
+        } else if (u.moderador == true){
           tbodyuser.innerHTML += `
           <tr>
             <td scope="row">${i + 1}</td>
@@ -42,13 +39,27 @@
             </td>
           </tr>
         `;
+        } else {
+          tbodyuser.innerHTML += `
+          <tr>
+            <td scope="row">${i + 1}</td>
+            <td><div style="background-image: url('/img/perfiles/foto-${u.email}.jpg')"></div></td>
+            <td>${u.email}</td>
+            <td>${u.nombre}</td>
+            <td>${u.password}</td>
+            <td><input onclick="aprobacionUser('${u.email}',${u.moderador})" type="checkbox" value="${u.moderador}"/></td>
+            <td>
+                <button class="btn btn-danger" onclick="eliminarUsuario('${u.email}')">Eliminar</button>
+            </td>
+          </tr>
+        `;    
         }
       });
     });
   }
 
   async function getDataMensajes() {
-    await axios.get("http://localhost:3000/mensajes").then((data) => {
+    await axios.get("https://proyectofs-alejandrob.herokuapp.com/mensajes").then((data) => {
       mensajes = data.data;
       console.log(mensajes);
       tbodymsg.innerHTML = "";
@@ -90,7 +101,7 @@
     getDataUsers()
     moderador = !moderador
     axios
-      .put("http://localhost:3000/usuario", {
+      .put("https://proyectofs-alejandrob.herokuapp.com/usuario", {
         email,
         moderador,
       })
@@ -104,7 +115,7 @@
     getDataMensajes()
     visible = !visible
     axios
-      .put("http://localhost:3000/mensaje", {
+      .put("https://proyectofs-alejandrob.herokuapp.com/mensaje", {
         id,
         visible,
       })
@@ -115,7 +126,7 @@
   }
 
   function eliminarUsuario(email) {
-        axios.delete("http://localhost:3000/usuario/" + email).then(() => {
+        axios.delete("https://proyectofs-alejandrob.herokuapp.com/usuario/" + email).then(() => {
         alert("Usuario " + email + " eliminado");
         getDataUsers();
         getDataMensajes();
@@ -123,7 +134,7 @@
     }
 
   function eliminarMensaje(id) {
-        axios.delete("http://localhost:3000/mensaje/" + id).then(() => {
+        axios.delete("https://proyectofs-alejandrob.herokuapp.com/mensaje/" + id).then(() => {
         alert("Mensaje " + id + " eliminado");
         getDataMensajes();
         });

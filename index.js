@@ -94,7 +94,7 @@ app.get('/SignIn', async (req, res) => {
         );
         if (user.administrador == true){
             res.send(`
-            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Admin?token=${token}">
+            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=https://proyectofs-alejandrob.herokuapp.com/Admin?token=${token}">
             Admin ${email}.
             <script>
             sessionStorage.setItem('token', JSON.stringify('${token}'))
@@ -102,7 +102,7 @@ app.get('/SignIn', async (req, res) => {
             `);
         } else if (user.moderador == true) {
             res.send(`
-            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=http://localhost:3000/Colaborador?token=${token}">
+            <META HTTP-EQUIV="REFRESH" CONTENT="1;URL=https://proyectofs-alejandrob.herokuapp.com/Colaborador?token=${token}">
             Colaborador ${email}.
             <script>
             sessionStorage.setItem('token', JSON.stringify('${token}'))

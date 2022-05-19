@@ -1,22 +1,22 @@
 {{> head }}
-<body id="bodyIndex">
+<body id="bodyIndex" onload="alertaDeberesyTareas()">
     <!-- Navbar para facilitar el ingreso a secciones. -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="http://localhost:3000/">Inicio</a>
+          <a class="navbar-brand" href="https://proyectofs-alejandrob.herokuapp.com/">Inicio</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="http://localhost:3000/deberes">Deberes</a>
+                <a class="nav-link active" aria-current="page" href="https://proyectofs-alejandrob.herokuapp.com/deberes">Deberes</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="http://localhost:3000/tareas">Tareas</a>
+                <a class="nav-link active" aria-current="page" href="https://proyectofs-alejandrob.herokuapp.com/tareas">Tareas</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="http://localhost:3000/recreo">Recreo</a>
+                <a class="nav-link active" aria-current="page" href="https://proyectofs-alejandrob.herokuapp.com/recreo">Recreo</a>
               </li>
             </ul>
           </div>
@@ -52,18 +52,75 @@
     <!-- Indices de secciones -->
     <section id="SectionDeberes">
         <h2><i class="fas fa-bath px-3"></i>Deberes<i class="fas fa-bath px-3"></i></h2>
-        <p>Deberes normales y especiales, dependiendo del dia.</p>
+        <div class="row justify-content-evenly">
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/HacerLaCama.jpg" class="card-img-top" alt="CardDeberes1">
+            <div class="card-body">
+              <p class="card-text">Todos los días debes hacer tu cama, es importante para que puedas dormir bien abrigada.</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/OrdenarRopa.jpg" class="card-img-top" alt="CardDeberes2">
+            <div class="card-body">
+              <p class="card-text">Mientras más ordenado esté tu closet, más fácil será encontrar lo que necesitas.</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/PrepararMochila.jpg" class="card-img-top" alt="CardDeberes3">
+            <div class="card-body">
+              <p class="card-text">Si preparas tu mochila temprano el día anterior, no olvidarás tus cosas importantes.</p>
+            </div>
+          </div>
+        </div>
     </section>
     <section id="SectionTareas">
         <h2 class="px-3"><i class="fas fa-book px-3"></i>Tareas<i class="fas fa-book px-3"></i></h2>
-        <p>Tareas y materias por estudiar para el Colegio.</p>
+        <div class="row justify-content-evenly">
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/PracticarCaligrafia.jpg" class="card-img-top" alt="CardTareas1">
+            <div class="card-body">
+              <p class="card-text">Si practicas tu caligrafía constantemente, podrás hacer tus pruebas de lenguaje y dictados sin problemas.</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/PracticarMusica.jpg" class="card-img-top" alt="CardTareas2">
+            <div class="card-body">
+              <p class="card-text">Debes ensayar con el instrumento que elijas para música.</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/PracticarTaek.jpg" class="card-img-top" alt="CardTareas3">
+            <div class="card-body">
+              <p class="card-text">Pon mucha atención en tu taller del Viernes. Con esfuerzo obtendrás tu cinturón.</p>
+            </div>
+          </div>
+        </div>
     </section>
     <section id="SectionRecreo">
         <h2><i class="fas fa-gamepad px-3"></i>Recreo<i class="fas fa-gamepad px-3"></i></h2>
-        <p>Mensajes de la familia y actualizaciones de tus juegos.</p>
+                <div class="row justify-content-evenly">
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/EriSmiling.jpg" class="card-img-top" alt="CardRecreo1">
+            <div class="card-body">
+              <p class="card-text">Tu serie favorita y tu personaje favorito. ¡Recuerda que aún hay mucho más que ver! ¿Puede ser Dragon Ball Super?</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/AnimalCrossing.jpg" class="card-img-top" alt="CardRecreo2">
+            <div class="card-body">
+              <p class="card-text">Todo parece indicar que Canelita va a retarte otra vez, pero con una sonrisa, por no hacer tus deberes en la isla :c</p>
+            </div>
+          </div>
+          <div class="card col-12 col-md-4" style="width: 18rem;">
+            <img src="img/fondos/Minecraft.jpeg" class="card-img-top" alt="CardRecreo3">
+            <div class="card-body">
+              <p class="card-text">Si vas sola al Nether, ten cuidado. !No vaya a ser que te pierdas durante meses como el papá!</p>
+            </div>
+          </div>
+        </div>
     </section>
     <footer id="footerIndex">
-      <h4 class="py-3">Ingreso colaboradores<a href="http://localhost:3000/login"><i class="fas fa-arrow-alt-circle-right px-3"></i></a></h4>
+      <h4 class="py-3">Ingreso colaboradores<a href="https://proyectofs-alejandrob.herokuapp.com/login"><i class="fas fa-arrow-alt-circle-right px-3"></i></a></h4>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

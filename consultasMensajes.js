@@ -1,10 +1,9 @@
 const { Pool } = require('pg');
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    password: '',
-    database: 'agendasamus',
-    port: 5432
+const pool = new Pool ({
+    connectionString: process.env.DATABASE_URL,
+        ssl: {
+        rejectUnauthorized: false
+        }
 });
 
 async function nuevoMensaje(contenido, seccion, multimedia, autor){
